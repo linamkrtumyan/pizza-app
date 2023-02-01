@@ -6,9 +6,22 @@ import { PizzaBlock, Skeleton } from "../components/PizzaBlock";
 export const Home = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [categoryId, setCategoryId] = useState(0);
+  const [sortType, setSortType] = useState({
+    name: "популярности",
+    sortProperty: "rating",
+  });
 
   const fetchData = () => {
-    fetch("https://626d16545267c14d5677d9c2.mockapi.io/items")
+    setIsLoading(true);
+
+    const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
+    const sortBy = sortType.sortProperty.replace("-", "");
+    const category = categoryId > 0 ? `category=${categoryId}` : "";
+    // fetch("https://626d16545267c14d5677d9c2.mockapi.io/items")
+    fetch(
+      `https://63da6b6019fffcd620c8ef15.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`
+    )
       .then((res) => {
         return res.json();
       })
@@ -22,13 +35,16 @@ export const Home = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [categoryId, sortType]);
 
   return (
     <React.Fragment>
       <div className="content__top">
-        <Categories />
-        <Sort />
+        <Categories
+          categoryId={categoryId}
+          onClickCategory={(id) => setCategoryId(id)}
+        />
+        <Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

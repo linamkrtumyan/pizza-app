@@ -10,7 +10,7 @@ function Cart() {
           <span>Очистить корзину</span>
         </div>
       </div>
-      <div className="content__items">
+      <div className="cart__content__items">
         <div class="cart__item">
           <div class="cart__item-img">
             <img

@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 
-function Sort() {
+function Sort({value, onChangeSort}) {
   const [sortBy, setSortBy] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const sorting = ["популярности", "цене", "алфавиту"];
+  const sorting = [
+    {name: "популярности (DESC)", sortProperty: "rating"},
+    {name: "популярности (ASC)", sortProperty: "-rating"},
+    {name: "цене (DESC)", sortProperty: "price"},
+    {name: "цене (ASC)", sortProperty: "-price"},
+    {name: "алфавиту (DESC)", sortProperty: "title"},
+    {name: "алфавиту (ASC)", sortProperty: "-title"},
+    ];
+
+    // const sortName = sorting[value].name
 
   const selectFilter = (index) => {
-    setSortBy(index);
+    onChangeSort(index);
     setIsOpen(false);
   };
   return (
@@ -25,17 +34,18 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setIsOpen(!isOpen)}>{sorting[sortBy]}</span>
+        <span onClick={() => setIsOpen(!isOpen)}>{value.name}</span>
       </div>
       {isOpen && (
         <div className="sort__popup">
           <ul>
             {sorting.map((sort, index) => (
               <li
-                className={sortBy === index && "active"}
-                onClick={() => selectFilter(index)}
+                key={index}
+                className={value.sortProperty === sort.sortProperty ? "active" : ""}
+                onClick={() => selectFilter(sort)}
               >
-                {sort}
+                {sort.name}
               </li>
             ))}
           </ul>
